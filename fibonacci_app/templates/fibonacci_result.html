@@ -1,0 +1,13 @@
+<html>
+<head>
+    <title>Cálculo</title>
+</head>
+<body>
+    <h1>Formulario de cálculo</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Calcular</button>
+    </form>
+</body>
+</html>

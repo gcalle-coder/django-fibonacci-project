@@ -1,0 +1,9 @@
+<h1>This is the list of consults</h1>
+{% for consult in fibonacci_data %}
+    <h2>Consult {{ forloop.counter }}</h2> <!-- forloop.counter comienza desde 1 -->
+    <p>Number: {{ consult.number }}</p>
+    <p>Result: {{ consult.result }}</p>
+    <p>Time: {{ consult.time }}</p>
+{% empty %}
+    <p>No consults found.</p>
+{% endfor %}
