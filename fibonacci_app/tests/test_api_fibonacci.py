@@ -10,7 +10,7 @@ pytestmark = pytest.mark.django_db
 
 
 # ---------------- Test GET Companies ----------------
-def test_zero_consults_should_return_empty_list(client) -> None:
+def test_rest_api_zero_consults_should_return_empty_list(client) -> None:
     """reverse()
     es una función que se utiliza para generar URLs dinámicamente a
     partir de los nombres de las rutas definidas en tu aplicación.
@@ -22,6 +22,12 @@ def test_zero_consults_should_return_empty_list(client) -> None:
     response = client.get(fibonacci_ser_url)
     assert response.status_code, 200
     assert json.loads(response.content) == []
+
+
+def test_http_request(client) -> None:
+    url = reverse("fibonacci_data_list")
+    response = client.get(path=url)
+    assert response.status_code, 200
 
 
 def test_make_consult_and_check_result_is_stored(client):
@@ -61,4 +67,4 @@ def test_consult_two_times_the_same_nuber_should_fail(client):
 
 
 def test_with_mock_assuring_logic_was_called(client) -> None:
-    pass
+    data = {"number": 1, "result": 1}

@@ -14,8 +14,3 @@ fibonacci_router.register(
     viewset=SerializerFibonacciCreateViews,
     basename="fibonacciSerializerConsult",
 )
-
-urlpatterns = [
-    path("fibonacci/", calculate_fibonacci, name="calculate_fibonacci"),
-    path("fibonacci_list/", list_all_fibonacci_data, name="fibonacci_data_list"),
-]
