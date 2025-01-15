@@ -5,4 +5,4 @@ from .models import FibonacciData
 class FibonacciDataSerialzer(serializers.ModelSerializer):
     class Meta:
         model = FibonacciData
-        fields = ["number", "result", "time"]
+        fields = ["id", "number", "result", "time"]

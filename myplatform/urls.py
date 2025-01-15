@@ -16,12 +16,9 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
-from fibonacci_app.views import (
-    calculate_fibonacci,
-    list_all_fibonacci_data,
-    SerializerFibonacciCreateViews,
-)
+from django.urls import path, include
+from fibonacci_app.views import calculate_fibonacci, list_all_fibonacci_data
+from fibonacci_app.urls import fibonacci_router
 
 # superuser admin
 # user: gorka
@@ -29,16 +26,5 @@ from fibonacci_app.views import (
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path(
-        "fibonacci_int/<int:number>",
-        calculate_fibonacci,
-        name="calculate_fibonacci_int",
-    ),
-    path("fibonacci/", calculate_fibonacci, name="calculate_fibonacci"),
-    path("fibonacci_list/", list_all_fibonacci_data, name="fibonacci_data_list"),
-    path(
-        "fibonacci_api/serializer_fibonacci/",
-        SerializerFibonacciCreateViews.as_view(),
-        name="fibonacci_consult_serializer",
-    ),
+    path("", include(fibonacci_router.urls)),
 ]

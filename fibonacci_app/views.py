@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from rest_framework import generics
+from rest_framework.viewsets import ModelViewSet
 from .serializers import FibonacciDataSerialzer
 from .models import FibonacciData
 from .fibonacci_logic.fibonacci_function import fibonacci_custom
@@ -43,6 +43,6 @@ def calculate_fibonacci(request):
     return render(request, "fibonacci_result.html", {"form": form})
 
 
-class SerializerFibonacciCreateViews(generics.ListCreateAPIView):
+class SerializerFibonacciCreateViews(ModelViewSet):
     queryset = FibonacciData.objects.all()
     serializer_class = FibonacciDataSerialzer
