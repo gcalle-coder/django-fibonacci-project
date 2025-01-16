@@ -51,3 +51,11 @@ jobs:
           export PYTHONPATH="${{ github.workspace }}:${{ github.workspace }}/myplatform"
           echo "PYTHONPATH is now: $PYTHONPATH"
           pipenv run pytest . -s -v --durations=0 --cov=./ --cov-report=term-missing --cov-report=html
+
+
+      # Subir el reporte de "pytest coverage" como artifact
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: htmlcov/  # Directorio donde pytest guarda el reporte HTML
