@@ -17,7 +17,13 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from fibonacci_app.views import calculate_fibonacci, list_all_fibonacci_data, calculate_fibonacci_by_rest_api
+from fibonacci_app.views import (
+    calculate_fibonacci,
+    calculate_fibonacci_by_int_path,
+    calculate_fibonacci_by_query,
+    list_all_fibonacci_data,
+    calculate_fibonacci_by_rest_api,
+)
 from fibonacci_app.urls import fibonacci_router
 
 # superuser admin
@@ -28,6 +34,12 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include(fibonacci_router.urls)),
     path("fibonacci/", calculate_fibonacci, name="calculate_fibonacci"),
+    path("fibonacci_int/<int:number>", calculate_fibonacci_by_int_path, name="fibonacci_int_path"),
+    path("fibonacci_query/", calculate_fibonacci_by_query, name="fibonacci_query"),
     path("fibonacci_list/", list_all_fibonacci_data, name="fibonacci_data_list"),
-    path("fibonacci_rest_api/", calculate_fibonacci_by_rest_api, name="rest_api_calculate_fibonacci"),
+    path(
+        "fibonacci_rest_api/",
+        calculate_fibonacci_by_rest_api,
+        name="rest_api_calculate_fibonacci",
+    ),
 ]

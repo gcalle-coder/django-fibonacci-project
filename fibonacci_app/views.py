@@ -16,13 +16,40 @@ def list_all_fibonacci_data(request):
     return render(request, "consults_list.html", {"fibonacci_data": fibonacci_data})
 
 
-def calculate_fibonacci_int(request, number):
+def calculate_fibonacci_by_int_path(request, number):
     result = fibonacci_custom(number)
     print(result)
     if not FibonacciData.objects.filter(number=number).exists():
         FibonacciData.objects.create(number=number, result=result)
+    return JsonResponse(
+        {"result": result, "details": "La operacion ha sido exitosa"}, status=201
+    )
 
-    return render(request, "fibonacci_result.html", {"result": result})
+
+def calculate_fibonacci_by_query(request):
+    """
+    Calcula el número de Fibonacci basado en un parámetro pasado por query string.
+    Ejemplo de URL: /mi_vista?number=5
+    """
+    # Obtener el valor de la query string 'number'
+    number = request.GET.get("number")
+
+    if number is None:
+        return JsonResponse(
+            {"error": "El parámetro 'number' es requerido."}, status=400
+        )
+
+    try:
+        number = int(number)  # Convertir a entero
+    except ValueError:
+        return JsonResponse(
+            {"error": "El parámetro 'number' debe ser un entero válido."}, status=400
+        )
+
+    # Lógica del cálculo de Fibonacci
+    result = fibonacci_custom(number)
+
+    return JsonResponse({"number": number, "result": result}, status=200)
 
 
 def calculate_fibonacci(request):
@@ -58,7 +85,7 @@ def calculate_fibonacci_by_rest_api(request=Request) -> Response:
     }
 
     """
-    number_data = request.data.get("number")
+    number_data = int(request.data.get("number"))
     result = fibonacci_custom(number_data)
     if FibonacciData.objects.filter(number=number_data).exists():
         return JsonResponse(

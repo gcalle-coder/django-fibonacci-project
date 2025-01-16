@@ -1,12 +1,12 @@
 import pytest
+from unittest.mock import patch
 import json
 from django.urls import reverse
-
-# from ..models import FibonacciData
 from fibonacci_app.models import FibonacciData
 
 fibonacci_ser_url = reverse("fibonacciSerializerConsult-list")
 pytestmark = pytest.mark.django_db
+from fibonacci_logic.fibonacci_function import fibonacci_custom
 
 
 # ---------------- Test GET Companies ----------------
@@ -28,6 +28,31 @@ def test_http_request(client) -> None:
     url = reverse("fibonacci_data_list")
     response = client.get(path=url)
     assert response.status_code, 200
+
+
+def test_fibonacci_request_by_path_variable(client) -> None:
+    response = client.get(path=f"/fibonacci_int/{2}")
+    assert response.status_code == 201
+    content_data = json.loads(response.content)
+    assert content_data["result"] == 1
+
+
+@pytest.mark.parametrize("number", [i for i in range(15)])
+@pytest.mark.parametrize("execution_number", range(2))
+def test_fibonacci_request_by_query_success(execution_number, number, client) -> None:
+    query_data = {"number": number}
+    response = client.get(path=f"/fibonacci_query/", data=query_data)
+    assert response.status_code == 200
+    content_data = json.loads(response.content)
+    result = fibonacci_custom(query_data["number"])
+    assert content_data["number"] == query_data["number"]
+    assert content_data["result"] == result
+
+
+def test_fibonacci_request_by_query_bad_keys_unsuccess(client) -> None:
+    query_data = {"number": "t"}
+    response = client.get(path=f"/fibonacci_query/", data=query_data)
+    assert response.status_code == 400
 
 
 def test_make_consult_and_check_result_is_stored(client):
@@ -66,5 +91,35 @@ def test_consult_two_times_the_same_nuber_should_fail(client):
     assert response.status_code == 400
 
 
+def test_fibonacci_request_with_formulary(client) -> None:
+    url = reverse("calculate_fibonacci")
+    form = {"number": 1}
+    response = client.post(path=url, data=form)
+    # verificamos codigo de redireccion
+    assert response.status_code == 302
+
+    response = client.get(fibonacci_ser_url)
+    assert response.status_code, 200
+    content_data = response.data[0]
+    assert content_data["number"] == 1
+    assert content_data["result"] == 1
+
+
 def test_with_mock_assuring_logic_was_called(client) -> None:
-    data = {"number": 1, "result": 1}
+    """
+    Mocking the 'fibonacci_custom' function with the patch decorator
+    La funcion que se va a mockear es 'fibonacci_custom'
+    y la finalidad de este test es validar nuestra funcion 'calculate_fibonacci_by_rest_api'
+    Recordando que esta funcion es un endpoint de la API
+    Y al ejercer un POST a este endpoint se llama a esta funcion.
+    Damos por hecho que la
+    """
+    with patch("fibonacci_app.views.fibonacci_custom") as mocked_fibonacci_custom:
+
+        # Valor que devolverá la funcion fibonacci_custom al ser llamada por la POST request a traves de
+        # la ruta /fibonacci_rest_api y paráetros number = 1
+        mocked_fibonacci_custom.return_value = 0
+        response = client.post(path="/fibonacci_rest_api/", data={"number": 1})
+        assert response.status_code == 201
+
+        mocked_fibonacci_custom.assert_called_once_with(1)
