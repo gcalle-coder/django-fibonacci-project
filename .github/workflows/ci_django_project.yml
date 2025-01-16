@@ -43,7 +43,7 @@ jobs:
           echo "PYTHONPATH is now: $env:PYTHONPATH"
           cd fibonacci_app
           dir
-          # pipenv run pytest . -s -v --durations=0 --cov=./fibonacci --cov-report=term-missing
+          pipenv run pytest . -s -v --durations=0 --cov=./ --cov-report=term-missing --cov-report=html
 
       - name: Run tests with PYTHONPATH (Linux)
         if: runner.os == 'Linux'
@@ -54,4 +54,4 @@ jobs:
           echo "PYTHONPATH is now: $PYTHONPATH"
           cd fibonacci_app
           ls -l
-          #pipenv run pytest . -s -v --durations=0 --cov=./fibonacci --cov-report=term-missing
+          pipenv run pytest . -s -v --durations=0 --cov=./ --cov-report=term-missing --cov-report=html
