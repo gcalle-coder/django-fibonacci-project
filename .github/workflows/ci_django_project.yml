@@ -60,11 +60,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report-windows
-          path: coverage-windows/  # Directorio personalizado para Windows
+          path: fibonacci_app/coverage-windows/  # Directorio personalizado para Windows
 
       - name: Upload coverage report (Linux)
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report-linux
-          path: coverage-linux/  # Directorio personalizado para Linux
+          path: fibonacci_app/coverage-linux/  # Directorio personalizado para Linux
