@@ -1,0 +1,55 @@
+name: CI django-fibonacci-project Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        python-version: ["3.9"]
+
+    name: Run Tests
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Pipenv
+        run: |
+          python -m pip install --upgrade pip
+          pip install pipenv
+
+      - name: Install dependencies
+        run: |
+          pipenv install --dev
+        
+      - name: Run tests with PYTHONPATH (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          echo "Current Directory: $(pwd)"
+          echo "The github.workspace is: ${{ github.workspace }}"
+          $env:PYTHONPATH = "${{ github.workspace }};${{ github.workspace }}\myplatform"
+          echo "PYTHONPATH is now: $env:PYTHONPATH"
+          cd fibonacci_app
+          pipenv run pytest . -s -v --durations=0 --cov=./fibonacci --cov-report=term-missing
+
+      - name: Run tests with PYTHONPATH (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          echo "Current Directory: $(pwd)"
+          echo "The github.workspace is: ${{ github.workspace }}"
+          export PYTHONPATH="${{ github.workspace }}:${{ github.workspace }}/myplatform"
+          echo "PYTHONPATH is now: $PYTHONPATH"
+          cd fibonacci_app
+          pipenv run pytest . -s -v --durations=0 --cov=./fibonacci --cov-report=term-missing
