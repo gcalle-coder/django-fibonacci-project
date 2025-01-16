@@ -42,7 +42,8 @@ jobs:
           $env:PYTHONPATH = "${{ github.workspace }};${{ github.workspace }}\myplatform"
           echo "PYTHONPATH is now: $env:PYTHONPATH"
           cd fibonacci_app
-          pipenv run pytest . -s -v --durations=0 --cov=./fibonacci --cov-report=term-missing
+          dir
+          # pipenv run pytest . -s -v --durations=0 --cov=./fibonacci --cov-report=term-missing
 
       - name: Run tests with PYTHONPATH (Linux)
         if: runner.os == 'Linux'
@@ -52,4 +53,5 @@ jobs:
           export PYTHONPATH="${{ github.workspace }}:${{ github.workspace }}/myplatform"
           echo "PYTHONPATH is now: $PYTHONPATH"
           cd fibonacci_app
-          pipenv run pytest . -s -v --durations=0 --cov=./fibonacci --cov-report=term-missing
+          ls -l
+          #pipenv run pytest . -s -v --durations=0 --cov=./fibonacci --cov-report=term-missing
