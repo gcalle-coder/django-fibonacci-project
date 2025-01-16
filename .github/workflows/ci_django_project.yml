@@ -55,7 +55,7 @@ jobs:
 
       # Subir el reporte de "pytest coverage" como artifact
       - name: Upload coverage report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: htmlcov/  # Directorio donde pytest guarda el reporte HTML
