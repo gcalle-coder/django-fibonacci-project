@@ -6,8 +6,7 @@ from fibonacci_app.models import FibonacciData
 
 fibonacci_ser_url = reverse("fibonacciSerializerConsult-list")
 pytestmark = pytest.mark.django_db
-from fibonacci_logic.fibonacci_function import fibonacci_custom
-
+from fibonacci_app.fibonacci_logic.fibonacci_function import fibonacci_custom
 
 # ---------------- Test GET Companies ----------------
 def test_rest_api_zero_consults_should_return_empty_list(client) -> None:

@@ -39,7 +39,7 @@ jobs:
         run: |
           echo "Current Directory: $(pwd)"
           echo "The github.workspace is: ${{ github.workspace }}"
-          $env:PYTHONPATH = "${{ github.workspace }};${{ github.workspace }}\myplatform;${{ github.workspace }}\fibonacci_app\fibonacci_logic"
+          $env:PYTHONPATH = "${{ github.workspace }};${{ github.workspace }}\myplatform;"
           echo "PYTHONPATH is now: $env:PYTHONPATH"
           pipenv run pytest . -s -v --durations=0 --cov=./ --cov-report=term-missing --cov-report=html
 
@@ -48,6 +48,6 @@ jobs:
         run: |
           echo "Current Directory: $(pwd)"
           echo "The github.workspace is: ${{ github.workspace }}"
-          export PYTHONPATH="${{ github.workspace }}:${{ github.workspace }}/myplatform:${{ github.workspace }}\fibonacci_app\fibonacci_logic"
+          export PYTHONPATH="${{ github.workspace }}:${{ github.workspace }}/myplatform"
           echo "PYTHONPATH is now: $PYTHONPATH"
           pipenv run pytest . -s -v --durations=0 --cov=./ --cov-report=term-missing --cov-report=html
