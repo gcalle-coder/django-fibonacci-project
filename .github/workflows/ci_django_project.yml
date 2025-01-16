@@ -39,7 +39,7 @@ jobs:
         run: |
           echo "Current Directory: $(pwd)"
           echo "The github.workspace is: ${{ github.workspace }}"
-          $env:PYTHONPATH = "${{ github.workspace }};${{ github.workspace }}\myplatform"
+          $env:PYTHONPATH = "${{ github.workspace }};${{ github.workspace }}\myplatform;${{ github.workspace }}\fibonacci_app\fibonacci_logic"
           echo "PYTHONPATH is now: $env:PYTHONPATH"
           cd fibonacci_app
           dir
@@ -50,7 +50,7 @@ jobs:
         run: |
           echo "Current Directory: $(pwd)"
           echo "The github.workspace is: ${{ github.workspace }}"
-          export PYTHONPATH="${{ github.workspace }}:${{ github.workspace }}/myplatform"
+          export PYTHONPATH="${{ github.workspace }}:${{ github.workspace }}/myplatform:${{ github.workspace }}\fibonacci_app\fibonacci_logic"
           echo "PYTHONPATH is now: $PYTHONPATH"
           cd fibonacci_app
           ls -l
