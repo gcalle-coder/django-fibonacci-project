@@ -41,7 +41,7 @@ jobs:
           echo "The github.workspace is: ${{ github.workspace }}"
           $env:PYTHONPATH = "${{ github.workspace }};${{ github.workspace }}\myplatform;"
           echo "PYTHONPATH is now: $env:PYTHONPATH"
-          pipenv run pytest . -s -v --durations=0 --cov=./ --cov-report=term-missing --cov-report=html
+          pipenv run pytest . -s -v --durations=0 --cov=./ --cov-report=term-missing --cov-report=html:coverage-windows
 
       - name: Run tests with PYTHONPATH (Linux)
         if: runner.os == 'Linux'
@@ -50,12 +50,19 @@ jobs:
           echo "The github.workspace is: ${{ github.workspace }}"
           export PYTHONPATH="${{ github.workspace }}:${{ github.workspace }}/myplatform"
           echo "PYTHONPATH is now: $PYTHONPATH"
-          pipenv run pytest . -s -v --durations=0 --cov=./ --cov-report=term-missing --cov-report=html
-
+          pipenv run pytest . -s -v --durations=0 --cov=./ --cov-report=term-missing --cov-report=html:coverage-linux
 
       # Subir el reporte de "pytest coverage" como artifact
-      - name: Upload coverage report
+      - name: Upload coverage report (Windows)
+        if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-report
-          path: htmlcov/  # Directorio donde pytest guarda el reporte HTML
+          name: coverage-report-windows
+          path: coverage-windows/  # Directorio personalizado para Windows
+
+      - name: Upload coverage report (Linux)
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-linux
+          path: coverage-linux/  # Directorio personalizado para Linux
